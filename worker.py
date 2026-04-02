@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlparse
 
-from js import Uint8Array
 from workers import Response, WorkerEntrypoint, fetch
 
 from jwc_core import (
@@ -117,7 +116,7 @@ async def fetch_text(url: str) -> str:
         raise ValueError(f"Upstream returned HTTP {response.status}.")
 
     content_type = response.headers.get("Content-Type") or response.headers.get("content-type")
-    raw = Uint8Array.new(await response.arrayBuffer()).to_bytes()
+    raw = bytes(await response.bytes())
     return decode_html(raw, content_type)
 
 
